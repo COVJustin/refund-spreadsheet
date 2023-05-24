@@ -1,0 +1,89 @@
+import openpyxl
+import tkinter as tk
+from tkinter import messagebox
+from tkinter import filedialog
+
+def create_excel_sheet(file_path, data):
+    workbook = openpyxl.Workbook()
+    sheet = workbook.active
+
+    # Define column titles
+    columns = ["PERMIT NUMBER", "DATE OF REFUND POSTED", "PMT DATE", "REFUND AMOUNT", "APPLICANT", "REFUND/VOID RECEIPT #"]
+
+    # Write column titles to the first row
+    for col_num, title in enumerate(columns, 1):
+        sheet.cell(row=1, column=col_num).value = title
+
+    # Write data to the first row of each column
+    for col_num, value in enumerate(data, 1):
+        sheet.cell(row=2, column=col_num).value = value
+
+    workbook.save(file_path)
+    messagebox.showinfo("Success", f"Excel sheet created successfully at {file_path}")
+
+def create_spreadsheet():
+    # Create GUI window
+    window = tk.Tk()
+    window.title("Create Spreadsheet")
+
+    # Function to handle button click
+    def create_sheet():
+        # Get the entered data
+        data = []
+        data.append(permit_number_entry.get())
+        data.append(date_refund_entry.get())
+        data.append(pmt_date_entry.get())
+        data.append(refund_amount_entry.get())
+        data.append(applicant_entry.get())
+        data.append(refund_receipt_entry.get())
+
+        # Get the file path to save the Excel sheet
+        file_path = filedialog.asksaveasfilename(defaultextension=".xlsx",
+                                                 filetypes=[("Excel Files", "*.xlsx")])
+
+        # Create the Excel sheet with the entered data
+        create_excel_sheet(file_path, data)
+
+        # Close the window
+        window.destroy()
+
+    # Create labels and entry widgets for each column
+    permit_number_label = tk.Label(window, text="PERMIT NUMBER:")
+    permit_number_label.pack()
+    permit_number_entry = tk.Entry(window)
+    permit_number_entry.pack()
+
+    date_refund_label = tk.Label(window, text="DATE OF REFUND POSTED:")
+    date_refund_label.pack()
+    date_refund_entry = tk.Entry(window)
+    date_refund_entry.pack()
+
+    pmt_date_label = tk.Label(window, text="PMT DATE:")
+    pmt_date_label.pack()
+    pmt_date_entry = tk.Entry(window)
+    pmt_date_entry.pack()
+
+    refund_amount_label = tk.Label(window, text="REFUND AMOUNT:")
+    refund_amount_label.pack()
+    refund_amount_entry = tk.Entry(window)
+    refund_amount_entry.pack()
+
+    applicant_label = tk.Label(window, text="APPLICANT:")
+    applicant_label.pack()
+    applicant_entry = tk.Entry(window)
+    applicant_entry.pack()
+
+    refund_receipt_label = tk.Label(window, text="REFUND/VOID RECEIPT #:")
+    refund_receipt_label.pack()
+    refund_receipt_entry = tk.Entry(window)
+    refund_receipt_entry.pack()
+
+    # Create button widget
+    button = tk.Button(window, text="Create Spreadsheet", command=create_sheet)
+    button.pack()
+
+    # Run the GUI loop
+    window.mainloop()
+
+# Call the function to create the spreadsheet using GUI
+create_spreadsheet()
